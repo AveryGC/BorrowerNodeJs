@@ -5,7 +5,7 @@ var express = require('express'),
     path = require('path'),
     modelsPath = path.resolve(__dirname, 'models');
 
-mongoose.connect('mongodb+srv://admin:admin123@cluster0-dvbv1.mongodb.net/test?retryWrites=true&w=majority', 
+mongoose.connect('mongodb+srv://admin:admin123@cluster0-dvbv1.mongodb.net/test?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
