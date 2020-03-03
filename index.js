@@ -11,3 +11,8 @@ mongoose.connect('mongodb+srv://admin:admin123@cluster0-dvbv1.mongodb.net/test?r
     }).catch(err => {
         console.log('ERROR:', err.message);
     });
+
+
+app.listen(3000, () => {
+    console.log("Server 3000 has started!");
+});
