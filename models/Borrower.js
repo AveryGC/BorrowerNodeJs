@@ -14,7 +14,7 @@ var borrowerSchema = new Schema({
     address: String,
     phone: String,
     loans: [{
-        type: Schema.Types.ObjectId, ref: 'Publisher'
+        type: Schema.Types.ObjectId, ref: 'Loan'
     }]
 });
 
