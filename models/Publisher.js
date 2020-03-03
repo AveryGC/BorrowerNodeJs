@@ -10,4 +10,4 @@ var publisherSchema = new Schema({
     phone: String
 });
 
-mongoose.model('Publisher', publisherSchema);
+module.exports = mongoose.model('Publisher', publisherSchema);

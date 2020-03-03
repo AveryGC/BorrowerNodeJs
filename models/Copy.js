@@ -12,4 +12,4 @@ var copySchema = new Schema({
     }
 });
 
-mongoose.model('Copy', copySchema);
+module.exports = mongoose.model('Copy', copySchema);

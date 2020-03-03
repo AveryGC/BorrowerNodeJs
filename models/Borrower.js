@@ -18,4 +18,4 @@ var borrowerSchema = new Schema({
     }]
 });
 
-mongoose.model('Borrower', borrowerSchema);
+module.exports = mongoose.model('Borrower', borrowerSchema);

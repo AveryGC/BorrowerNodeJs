@@ -14,4 +14,4 @@ var branchSchema = new Schema({
     borrowers: [{ type: Schema.Types.ObjectId, ref: 'Borrower', }]
 });
 
-mongoose.model('Branch', branchSchema);
+module.exports = mongoose.model('Branch', branchSchema);

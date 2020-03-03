@@ -10,7 +10,7 @@ var loanSchema = new Schema({
         type: Date,
         required: true
     },
-    dueDate: {
+    dateDue: {
         type: Date,
         required: true
     },
@@ -20,4 +20,4 @@ var loanSchema = new Schema({
     }
 });
 
-mongoose.model('Loan', loanSchema);
+module.exports = mongoose.model('Loan', loanSchema);
