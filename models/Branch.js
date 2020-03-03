@@ -11,7 +11,7 @@ var branchSchema = new Schema({
         required: true
     },
     copies: [{ type: Schema.Types.ObjectId, ref: 'Copy', }],
-    borrowers: [{ type: Schema.Types.ObjectId, ref: 'Borrower', }]
+    loans: [{ type: Schema.Types.ObjectId, ref: 'Loan', }]
 });
 
 module.exports = mongoose.model('Branch', branchSchema);

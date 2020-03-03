@@ -6,6 +6,10 @@ var copySchema = new Schema({
         type: Schema.Types.ObjectId, ref: 'Book',
         required: true
     },
+    branch: {
+        type: Schema.Types.ObjectId, ref: 'Branch',
+        required: true
+    },
     amount: {
         type: Number,
         required: true

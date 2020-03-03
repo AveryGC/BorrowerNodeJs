@@ -6,6 +6,10 @@ var loanSchema = new Schema({
         type: Schema.Types.ObjectId, ref: 'Book',
         required: true
     },
+    branch: {
+        type: Schema.Types.ObjectId, ref: 'Branch',
+        required: true
+    },
     dateOut: {
         type: Date,
         required: true
