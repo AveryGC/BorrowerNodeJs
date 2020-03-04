@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
 const Transaction = require("mongoose-transactions");
 const Copies = require('../models/Copy.js');
 
+let borrowerService =  {};
 
-export function checkoutBook(borrowerId, branchId, bookId, cb) {
+borrowerService.checkoutBook = (borrowerId, branchId, bookId, cb) => {
     //begin transcation
     let trans = new Transaction();
     Copies.findOne({
@@ -34,6 +34,8 @@ export function checkoutBook(borrowerId, branchId, bookId, cb) {
     });     
 }
 
-export function returnBook(borrowerId,branchId,bookId,cb){
+borrowerService.returnBook = (borrowerId,branchId,bookId,cb) => {
 
 }
+
+module.exports = borrowerService;
