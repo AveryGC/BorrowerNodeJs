@@ -2,6 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var loanSchema = new Schema({
+    borrower: {
+        type: Schema.Types.ObjectId, ref: 'Borrower',
+        required: true
+    },
     book: {
         type: Schema.Types.ObjectId, ref: 'Book',
         required: true
