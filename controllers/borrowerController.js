@@ -6,9 +6,10 @@ routes.post('loans', (req, res) => {
         if (err) {
             res.status(404);
             res.send({error: err});
-        } 
-        res.status(201);
-        res.send(null);
+        } else {
+             res.status(201);
+             res.send(null);
+        }
     });
 });
 
