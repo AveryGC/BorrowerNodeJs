@@ -3,7 +3,8 @@ const express = require('express'),
     mongoose = require('mongoose'),
     fs = require('fs'),
     path = require('path'),
-    modelsPath = path.resolve(__dirname, 'models');
+    modelsPath = path.resolve(__dirname, 'models'),
+    seedDB = require('./seedDB');
 
 const borrowerRoutes = require('./controllers/borrowerController');
 
@@ -18,6 +19,8 @@ mongoose.connect('mongodb+srv://admin:admin123@cluster0-dvbv1.mongodb.net/test?r
 }).catch(err => {
     console.log('ERROR:', err.message);
 });
+
+seedDB();
 
 app.use("/", borrowerRoutes);
 

@@ -21,7 +21,7 @@ export function checkoutBook(borrowerId, branchId, bookId, cb) {
             }
             trans.insertOne('Loan', loan);
             copies.amount--;
-            trans.update('Copy', copies._id, copies)
+            trans.update('Copy', copies._id, copies);
             trans.run();
             cb(null);
         } else {
