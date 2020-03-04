@@ -55,27 +55,6 @@ let genres = [
     }
 ];
 
-let books = [
-    {
-        title: "Book1",
-        publisher: publishers[0]._id,
-        authors: [authors[0]._id, authors[1]._id],
-        genres: [genres[0]._id, genres[1]._id]
-    },
-    {
-        title: "Book2",
-        publisher: publishers[1]._id,
-        authors: [authors[1]._id, authors[2]._id],
-        genres: [genres[1]._id, genres[2]._id]
-    },
-    {
-        title: "Book3",
-        publisher: publishers[2]._id,
-        authors: [authors[2]._id],
-        genres: [genres[2]._id]
-    }
-];
-
 let branches = [
     {
         name: "Branch1",
@@ -91,29 +70,13 @@ let branches = [
     }
 ];
 
-let copies = [
-    {
-        book: books[0]._id,
-        branch: branches[0]._id,
-        amount: 3
-    },
-    {
-        book: books[1]._id,
-        branch: branches[1]._id,
-        amount: 3
-    },
-    {
-        book: books[2]._id,
-        branch: branches[2]._id,
-        amount: 3
-    }
-];
-
 function seedDB() {
     Author.remove({}, err => {
         authors.forEach(author => {
             Author.create(author, (err, createdAuthor) => {
+                console.log(createdAuthor);
                 author._id = createdAuthor._id;
+                console.log(1);
             });
         });
     });
@@ -142,9 +105,31 @@ function seedDB() {
         });
     });
 
+    let books = [
+        {
+            title: "Book1",
+            publisher: publishers[0]._id,
+            authors: [authors[0]._id, authors[1]._id],
+            genres: [genres[0]._id, genres[1]._id]
+        },
+        {
+            title: "Book2",
+            publisher: publishers[1]._id,
+            authors: [authors[1]._id, authors[2]._id],
+            genres: [genres[1]._id, genres[2]._id]
+        },
+        {
+            title: "Book3",
+            publisher: publishers[2]._id,
+            authors: [authors[2]._id],
+            genres: [genres[2]._id]
+        }
+    ];
+
     Book.remove({}, err => {
         books.forEach(book => {
             Book.create(book, (err, createdBook) => {
+                console.log(err);
                 book._id = createdBook._id;
             });
         });
@@ -157,6 +142,24 @@ function seedDB() {
             });
         });
     });
+
+    let copies = [
+        {
+            book: books[0]._id,
+            branch: branches[0]._id,
+            amount: 3
+        },
+        {
+            book: books[1]._id,
+            branch: branches[1]._id,
+            amount: 3
+        },
+        {
+            book: books[2]._id,
+            branch: branches[2]._id,
+            amount: 3
+        }
+    ];
 
     Copy.remove({}, err => {
         copies.forEach(copy => {

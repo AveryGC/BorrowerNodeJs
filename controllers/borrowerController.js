@@ -1,5 +1,5 @@
 const routes = require('express').Router(),
-     service = require('service\borrowerService.js');
+     service = require('../service/borrowerService.js');
 
 routes.post('loans', (req, res) => {
     service.checkoutBook(req.body.borrowerId, req.body.branchId, req.body.bookId, (err) => {
@@ -20,7 +20,7 @@ routes.put('borrowers/:borrowId/branches/:branchId/books/:bookId', (req,resp) =>
         }
         resp.status(200);
         resp.send();
-    })
-})
+    });
+});
 
-module.exports.routes;
+module.exports = routes;
