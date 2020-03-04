@@ -1,21 +1,20 @@
-let routes = require('express').Router();
-let service = require('service\borrowerService.js');
+const routes = require('express').Router(),
+     service = require('service\borrowerService.js');
 
-//change
-
-routes.post('borrowers/:borrowId/branches/:branchId/books/:bookId',function(req,resp){
-    service.checkoutBook(req.param.borrowId,req.param.branchId,req.param.bookId,function(error,result){
-        if(error){
-            resp.status();
-            resp.send();
+routes.post('loans', (req, res) => {
+    service.checkoutBook(req.body.borrowerId, req.body.branchId, req.body.bookId, (err) => {
+        if (err) {
+            res.status(404);
+            res.send({error: err});
+        } else {
+             res.status(201);
+             res.send(null);
         }
-        resp.status(201);
-        resp.send(result);
-    })
-})
+    });
+});
 
-routes.put('borrowers/:borrowId/branches/:branchId/books/:bookId',function(req,resp){
-    service.returnBook(req.param.borrowId,req.param.branchId,req.param.bookId,function(error,result){
+routes.put('borrowers/:borrowId/branches/:branchId/books/:bookId', (req,resp) => {
+    service.returnBook(req.param.borrowId,req.param.branchId,req.param.bookId, (error,result) => {
         if(error){
 
         }
