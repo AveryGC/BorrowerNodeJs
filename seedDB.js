@@ -110,31 +110,31 @@ let copies = [
 ];
 
 async function seedDB() {
-    await Author.remove({});
+    await Author.deleteMany({});
     for (let i = 0; i < authors.length; i++) {
         const author = await Author.create(authors[i]);
         console.log('author: ' + author._id);
         authors[i]._id = author._id;
     }
-    await Publisher.remove({});
+    await Publisher.deleteMany({});
     for (let i = 0; i < publishers.length; i++) {
         const publisher = await Publisher.create(publishers[i]);
         console.log('publisher: ' + publisher._id);
         publishers[i]._id = publisher._id;
     }
-    await Genre.remove({});
+    await Genre.deleteMany({});
     for (let i = 0; i < genres.length; i++) {
         const genre = await Genre.create(genres[i]);
         console.log('genre: ' + genre._id);
         genres[i]._id = genre._id;
     }
-    await Borrower.remove({});
+    await Borrower.deleteMany({});
     for (let i = 0; i < borrowers.length; i++) {
         const borrower = await Borrower.create(borrowers[i]);
         console.log('borrower: ' + borrower._id);
         borrowers[i]._id = borrower._id;
     }
-    await Book.remove({});
+    await Book.deleteMany({});
     for (let i = 0; i < books.length; i++) {
         const book = await Book.create({
             title: books[i].title,
@@ -145,13 +145,13 @@ async function seedDB() {
         console.log('book: ' + book._id);
         books[i]._id = book._id;
     }
-    await Branch.remove({});
+    await Branch.deleteMany({});
     for (let i = 0; i < branches.length; i++) {
         const branch = await Branch.create(branches[i]);
         console.log('branch: ' + branch._id);
         branches[i]._id = branch._id;
     }
-    await Copy.remove({});
+    await Copy.deleteMany({});
     for (let i = 0; i < copies.length; i++) {
         const copy = await Copy.create({
             book: books[i],
@@ -161,7 +161,7 @@ async function seedDB() {
         console.log('copy: ' + copy._id);
         copies[i]._id = copy._id;
     }
-    await Loan.remove({});
+    await Loan.deleteMany({});
     for (let i = 0; i < copies.length; i++) {
         const loan = await Loan.create({
             borrower: borrowers[i],
