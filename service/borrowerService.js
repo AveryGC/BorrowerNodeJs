@@ -76,7 +76,7 @@ borrowerService.returnBook = async (loanId) => {
         });
         if (!copy) {
             throw {
-                message: "Unable to find copies.",
+                //unable to update copies but do not reveal to client
                 status: 500
             };
         }
