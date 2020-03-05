@@ -23,8 +23,7 @@ var loanSchema = new Schema({
         required: true
     },
     dateIn: {
-        type: Date,
-        required: true
+        type: Date
     }
 });
 

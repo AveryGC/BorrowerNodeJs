@@ -161,6 +161,17 @@ async function seedDB() {
         console.log('copy: ' + copy._id);
         copies[i]._id = copy._id;
     }
+    await Loan.remove({});
+    for (let i = 0; i < copies.length; i++) {
+        const loan = await Loan.create({
+            borrower: borrowers[i],
+            book: books[i],
+            branch: branches[i],
+            dateOut: new Date(),
+            dateDue: new Date(Date.now() + 6.04e+8)
+        });
+        console.log('loan: ' + loan._id);
+    }
 };
 
 module.exports = seedDB;
