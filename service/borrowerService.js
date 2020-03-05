@@ -51,12 +51,6 @@ borrowerService.returnBook = async (loanId) => {
                 status: 404
             };
         }
-        if (loan.dateDue < new Date()) {
-            throw {
-                message: "Loan due date already passed.",
-                status: 400
-            };
-        }
         if (loan.dateIn) {
             throw {
                 message: "Book already returned.",
