@@ -4,7 +4,8 @@ const express = require('express'),
     fs = require('fs'),
     path = require('path'),
     modelsPath = path.resolve(__dirname, 'models'),
-    seedDB = require('./seedDB');
+    seedDB = require('./seedDB'),
+    bodyParser = require('body-parser');
 
 const borrowerRoutes = require('./controllers/borrowerController');
 
@@ -21,6 +22,9 @@ mongoose.connect('mongodb+srv://admin:admin123@cluster0-dvbv1.mongodb.net/test?r
 });
 
 seedDB();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use("/", borrowerRoutes);
 

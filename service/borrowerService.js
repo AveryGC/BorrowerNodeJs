@@ -1,39 +1,45 @@
 const mongoose = require('mongoose');
 const Transaction = require("mongoose-transactions");
-const Copies = require('../models/Copy.js');
 
+const Loan = require('../models/Loan');
+const Copy = require('../models/Copy');
 
-export function checkoutBook(borrowerId, branchId, bookId, cb) {
-    //begin transcation
-    let trans = new Transaction();
-    Copies.findOne({
-        "book._id": bookId,
-        "branch._id": branchId
-    }).then((copies) => {
-        if (copies.amount) {
-            let date = new Date();
-            let loan = {
-                "book": bookId,
-                "branch": branchId,
-                "borrower": borrowerId,
-                "dataOut": date,
-                "dateDue": date.addDays(14),
-            }
-            trans.insertOne('Loan', loan);
-            copies.amount--;
-            trans.update('Copy', copies._id, copies);
-            trans.run();
-            cb(null);
-        } else {
-            throw "There are currently no copies of this book in the branch.";
+module.exports = {
+    async returnBook(loanId) {
+        let transaction = new Transaction();
+        const loan = await Loan.findById(loanId);
+        if (!loan) {
+            transaction.rollback();
+            throw new Error({
+                message: 'Loan not found.',
+                code: 404
+            });
         }
-    }).catch((err) => {
-        console.log(err);
-        trans.rollback();
-        cb(err);
-    });     
-}
-
-export function returnBook(borrowerId,branchId,bookId,cb){
-
-}
+        if (loan.dateDue < new Date()) {
+            transaction.rollback();
+            throw new Error({
+                message: "Loan due date already passed.",
+                code: 400
+            });
+        }
+        loan.dateIn = new Date();
+        loan.update();
+        const copy = await Copy.findOneAndUpdate({
+            'book._id': loan.book._id,
+            'branch._id': loan.branch._id
+        }, {
+            $inc: {
+                amount: 1
+            }
+        });
+        if (!copy) {
+            transaction.rollback();
+            throw new Error({
+                message: "Copy not found",
+                code: 404
+            });
+        }
+        console.log(copy);
+        transaction.commit();
+    }
+};

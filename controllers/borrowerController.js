@@ -1,26 +1,15 @@
 const routes = require('express').Router(),
-     service = require('service\borrowerService.js');
+    service = require('../service/borrowerService.js');
 
-routes.post('loans', (req, res) => {
-    service.checkoutBook(req.body.borrowerId, req.body.branchId, req.body.bookId, (err) => {
-        if (err) {
-            res.status(404);
-            res.send({error: err});
-        } else {
-             res.status(201);
-             res.send(null);
-        }
-    });
+routes.put('/return', async (req, res) => {
+    try {
+        const loanId = req.body;
+        await service.returnBook(loanId);
+        res.status(204).send();
+    } catch (error) {
+        console.log('Error: ' + err.message);
+        res.status(err.code ? err.code : 500).send();
+    }
 });
 
-routes.put('borrowers/:borrowId/branches/:branchId/books/:bookId', (req,resp) => {
-    service.returnBook(req.param.borrowId,req.param.branchId,req.param.bookId, (error,result) => {
-        if(error){
-
-        }
-        resp.status(200);
-        resp.send();
-    })
-})
-
-module.exports.routes;
+module.exports = routes;

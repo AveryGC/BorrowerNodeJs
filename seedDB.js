@@ -1,10 +1,10 @@
-const Author  = require('./models/Author'),
-    Book      = require('./models/Book'),
-    Borrower  = require('./models/Branch'),
-    Branch    = require('./models/Branch'),
-    Copy      = require('./models/Copy'),
-    Genre     = require('./models/Genre'),
-    Loan      = require('./models/Loan'),
+const Author = require('./models/Author'),
+    Book = require('./models/Book'),
+    Borrower = require('./models/Borrower'),
+    Branch = require('./models/Branch'),
+    Copy = require('./models/Copy'),
+    Genre = require('./models/Genre'),
+    Loan = require('./models/Loan'),
     Publisher = require('./models/Publisher');
 
 let authors = [
@@ -21,7 +21,7 @@ let authors = [
 
 let publishers = [
     {
-        name: "Publisher1"
+        name: "Publisher1",
     },
     {
         name: "Publisher2"
@@ -109,62 +109,58 @@ let copies = [
     }
 ];
 
-function seedDB() {
-    Author.remove({}, err => {
-        authors.forEach(author => {
-            Author.create(author, (err, createdAuthor) => {
-                author._id = createdAuthor._id;
-            });
+async function seedDB() {
+    await Author.remove({});
+    for (let i = 0; i < authors.length; i++) {
+        const author = await Author.create(authors[i]);
+        console.log('author: ' + author._id);
+        authors[i]._id = author._id;
+    }
+    await Publisher.remove({});
+    for (let i = 0; i < publishers.length; i++) {
+        const publisher = await Publisher.create(publishers[i]);
+        console.log('publisher: ' + publisher._id);
+        publishers[i]._id = publisher._id;
+    }
+    await Genre.remove({});
+    for (let i = 0; i < genres.length; i++) {
+        const genre = await Genre.create(genres[i]);
+        console.log('genre: ' + genre._id);
+        genres[i]._id = genre._id;
+    }
+    await Borrower.remove({});
+    for (let i = 0; i < borrowers.length; i++) {
+        const borrower = await Borrower.create(borrowers[i]);
+        console.log('borrower: ' + borrower._id);
+        borrowers[i]._id = borrower._id;
+    }
+    await Book.remove({});
+    for (let i = 0; i < books.length; i++) {
+        const book = await Book.create({
+            title: books[i].title,
+            publisher: publishers[i],
+            authors: authors,
+            genres: genres
         });
-    });
-
-    Publisher.remove({}, err => {
-        publishers.forEach(publisher => {
-            Publisher.create(publisher, (err, createdPublisher) => {
-                publisher._id = createdPublisher._id;
-            });
+        console.log('book: ' + book._id);
+        books[i]._id = book._id;
+    }
+    await Branch.remove({});
+    for (let i = 0; i < branches.length; i++) {
+        const branch = await Branch.create(branches[i]);
+        console.log('branch: ' + branch._id);
+        branches[i]._id = branch._id;
+    }
+    await Copy.remove({});
+    for (let i = 0; i < copies.length; i++) {
+        const copy = await Copy.create({
+            book: books[i],
+            branch: branches[i],
+            amount: copies[i].amount
         });
-    });
-
-    Borrower.remove({}, err => {
-        borrowers.forEach(borrower => {
-            Borrower.create(borrower, (err, createdBorrower) => {
-                borrower._id = createdBorrower._id;
-            });
-        });
-    });
-
-    Genre.remove({}, err => {
-        genres.forEach(genre => {
-            Genre.create(genre, (err, createdGenre) => {
-                genre._id = createdGenre._id;
-            });
-        });
-    });
-
-    Book.remove({}, err => {
-        books.forEach(book => {
-            Book.create(book, (err, createdBook) => {
-                book._id = createdBook._id;
-            });
-        });
-    });
-
-    Branch.remove({}, err => {
-        branches.forEach(branch => {
-            Branch.create(branch, (err, createdBranch) => {
-                branch._id = createdBranch._id;
-            });
-        });
-    });
-
-    Copy.remove({}, err => {
-        copies.forEach(copy => {
-            Copy.create(copy, (err, createdCopy) => {
-                copy._id = createdCopy._id;
-            });
-        });
-    });
-}
+        console.log('copy: ' + copy._id);
+        copies[i]._id = copy._id;
+    }
+};
 
 module.exports = seedDB;
