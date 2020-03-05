@@ -1,5 +1,4 @@
-const mongoose = require('mongoose'),
-    Author = require('./models/Author'),
+const Author = require('./models/Author'),
     Book = require('./models/Book'),
     Borrower = require('./models/Borrower'),
     Branch = require('./models/Branch'),
@@ -115,25 +114,25 @@ async function seedDB() {
     for (let i = 0; i < authors.length; i++) {
         const author = await Author.create(authors[i]);
         console.log('author: ' + author._id);
-        authors[i]._id = mongoose.Types.ObjectId(author._id);
+        authors[i]._id = author._id;
     }
     await Publisher.remove({});
     for (let i = 0; i < publishers.length; i++) {
         const publisher = await Publisher.create(publishers[i]);
         console.log('publisher: ' + publisher._id);
-        publishers[i]._id = mongoose.Types.ObjectId(publisher._id);
+        publishers[i]._id = publisher._id;
     }
     await Genre.remove({});
     for (let i = 0; i < genres.length; i++) {
         const genre = await Genre.create(genres[i]);
         console.log('genre: ' + genre._id);
-        genres[i]._id = mongoose.Types.ObjectId(genre._id);
+        genres[i]._id = genre._id;
     }
     await Borrower.remove({});
     for (let i = 0; i < borrowers.length; i++) {
         const borrower = await Borrower.create(borrowers[i]);
         console.log('borrower: ' + borrower._id);
-        borrowers[i]._id = mongoose.Types.ObjectId(borrower._id);
+        borrowers[i]._id = borrower._id;
     }
     await Book.remove({});
     for (let i = 0; i < books.length; i++) {
@@ -144,13 +143,13 @@ async function seedDB() {
             genres: genres[i]
         });
         console.log('book: ' + book._id);
-        books[i]._id = mongoose.Types.ObjectId(book._id);
+        books[i]._id = book._id;
     }
     await Branch.remove({});
     for (let i = 0; i < branches.length; i++) {
         const branch = await Branch.create(branches[i]);
         console.log('branch: ' + branch._id);
-        branches[i]._id = mongoose.Types.ObjectId(branch._id);
+        branches[i]._id = branch._id;
     }
     await Copy.remove({});
     for (let i = 0; i < copies.length; i++) {
@@ -160,7 +159,7 @@ async function seedDB() {
             amount: copies[i].amount
         });
         console.log('copy: ' + copy._id);
-        copies[i]._id = mongoose.Types.ObjectId(copy._id);
+        copies[i]._id = copy._id;
     }
 };
 
