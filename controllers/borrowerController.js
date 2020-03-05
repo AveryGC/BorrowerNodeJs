@@ -18,7 +18,12 @@ router.put('/loans', async (req, res) => {
         res.status(204).send();
     } catch (err) {
         console.log(err.message);
-        res.status(err.status ? err.status : 500).send();
+        let status = err.status ? err.status : 500;
+        res.status(status).send({
+            error: {
+                status: status
+            }
+        });
     }
 });
 
