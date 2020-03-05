@@ -161,6 +161,7 @@ async function seedDB() {
         console.log('copy: ' + copy._id);
         copies[i]._id = copy._id;
     }
+    Loan.createCollection();
 };
 
 module.exports = seedDB;
