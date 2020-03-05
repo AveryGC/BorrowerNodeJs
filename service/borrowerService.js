@@ -28,7 +28,7 @@ borrowerService.checkoutBook = async (borrowerId, branchId, bookId) => {
             "dateOut": dateOut,
             "dateDue": dateDue
         }; 
-        loan = await Loans.create([loan], {session});
+        await Loans.create([loan], {session});
         copies.amount--;
         await copies.save(); // no need to include session because session is alrdy associated with this obj
         await session.commitTransaction();
