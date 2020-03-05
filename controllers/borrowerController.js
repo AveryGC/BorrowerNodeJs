@@ -17,11 +17,8 @@ router.put('/loans', async (req, res) => {
         await service.returnBook(req.body.loanId);
         res.status(204).send();
     } catch (err) {
-        let status = err.status ? err.status : 500;
-        res.status(status).send({
-            status: status,
-            message: err.message
-        });
+        console.log(err.message);
+        res.status(err.status ? err.status : 500).send();
     }
 });
 
