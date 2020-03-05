@@ -4,28 +4,27 @@ const express = require('express'),
     fs = require('fs'),
     path = require('path'),
     modelsPath = path.resolve(__dirname, 'models'),
-    seedDB = require('./seedDB'),
-    bodyParser = require('body-parser');
+    bodyParser = require("body-parser"),
+    seedDB = require('./seedDB');
 
 const borrowerRoutes = require('./controllers/borrowerController');
 
 mongoose.connect('mongodb+srv://admin:admin123@cluster0-dvbv1.mongodb.net/test?retryWrites=true&w=majority', {
     useNewUrlParser: true,
+    useCreateIndex: true,
     useUnifiedTopology: true
 }).then(() => {
     console.log('Connected to DB!');
     fs.readdirSync(modelsPath).forEach(file => {
         require(modelsPath + '/' + file);
     });
+    seedDB();
 }).catch(err => {
     console.log('ERROR:', err.message);
 });
 
-seedDB();
-
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.use(bodyParser.urlencoded({extended: true}));
 app.use("/", borrowerRoutes);
 
 app.listen(3000, () => {

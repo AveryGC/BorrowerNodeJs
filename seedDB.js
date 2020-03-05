@@ -21,7 +21,7 @@ let authors = [
 
 let publishers = [
     {
-        name: "Publisher1"
+        name: "Publisher1",
     },
     {
         name: "Publisher2"
