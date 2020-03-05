@@ -139,8 +139,8 @@ async function seedDB() {
         const book = await Book.create({
             title: books[i].title,
             publisher: publishers[i],
-            authors: authors[i],
-            genres: genres[i]
+            authors: authors,
+            genres: genres
         });
         console.log('book: ' + book._id);
         books[i]._id = book._id;
