@@ -16,7 +16,6 @@ borrowerService.checkoutBook = async (borrowerId, branchId, bookId) => {
     try {
         // check if borrower exists
         let borrower = await Borrowers.find({_id: borrowerId}).limit(1);
-        console.log(borrower);
         if (!borrower.length) {
             throw new Error("Invalid card number for borrower.");
         }
