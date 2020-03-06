@@ -18,7 +18,7 @@ mongoose.connect('mongodb+srv://admin:admin123@cluster0-dvbv1.mongodb.net/test?r
     fs.readdirSync(modelsPath).forEach(file => {
         require(modelsPath + '/' + file);
     });
-    seedDB();
+    // seedDB();
 }).catch(err => {
     console.log('ERROR:', err.message);
 });

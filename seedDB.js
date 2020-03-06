@@ -105,7 +105,7 @@ let copies = [
     {
         book: books[2]._id,
         branch: branches[2]._id,
-        amount: 3
+        amount: 0
     }
 ];
 
