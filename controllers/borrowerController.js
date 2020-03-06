@@ -33,8 +33,6 @@ router.get('/borrowers', async (req, resp) => {
 
 // Read all loans for a specific borrower
 router.get('/borrowers/:id/loans', async (req, resp) => {
-    if (req.params.id.length != 24)
-        return resp.status(400).send();
     try {
         let loans = await service.findLoans(req.params.id);
         resp.status(200).send(loans);
@@ -56,8 +54,6 @@ router.get('/branches', async (req, resp) => {
 // Read all book copies in a specific branch
 router.get('/branches/:id/copies', async (req, resp) => {
     try {
-        if (new String(req.params.id).length != 24)
-            return resp.status(400).send("Not a valid branch id.");
         let copies = await service.findCopiesByBranch(req.params.id);
         resp.status(200).send(copies);
     } catch (err) {
