@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const Copies = require('../models/Copy'),
     Branches = require('../models/Branch')
-    Loans = require('../models/Loan');
-    Borrowers = require('../models/Borrower')
+Loans = require('../models/Loan');
+Borrowers = require('../models/Borrower')
 
 let borrowerService = {};
 
@@ -15,7 +15,7 @@ borrowerService.checkoutBook = async (borrowerId, branchId, bookId) => {
     session.startTransaction();
     try {
         // check if borrower exists
-        let borrower = await Borrowers.find({_id: borrowerId}).limit(1);
+        let borrower = await Borrowers.find({ _id: borrowerId }).limit(1);
         if (!borrower.length) {
             throw new Error("Invalid card number for borrower.");
         }
@@ -50,6 +50,12 @@ borrowerService.checkoutBook = async (borrowerId, branchId, bookId) => {
 }
 
 borrowerService.returnBook = async (loanId) => {
+    if (!mongoose.Types.ObjectId.isValid(loanId)) {
+        throw {
+            message: 'Invalid Loan Id',
+            status: 400
+        }
+    }
     let session = await mongoose.startSession();
     session.startTransaction();
     try {
@@ -95,26 +101,26 @@ borrowerService.returnBook = async (loanId) => {
 }
 
 borrowerService.findLoans = async (borrowerId) => {
-    try{
+    try {
         borrowerId = mongoose.Types.ObjectId(borrowerId);
-        let loan = await Loans.find({"borrower" : borrowerId});
+        let loan = await Loans.find({ "borrower": borrowerId });
         if (!loan) {
             throw err("No loans found.");
         }
         return loan;
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
 
 borrowerService.findBorrowers = async () => {
-    try{
+    try {
         let borrowers = await Borrowers.find();
         if (!borrowers) {
             throw err("Could not find any borrowers.");
         }
         return borrowers;
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -126,7 +132,7 @@ borrowerService.findBranches = async () => {
             throw err("no branches found");
         }
         return branch;
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
@@ -134,12 +140,12 @@ borrowerService.findBranches = async () => {
 borrowerService.findCopiesByBranch = async (branchId) => {
     try {
         branchId = mongoose.Types.ObjectId(branchId);
-        let copies = await Copies.find({ branch : branchId});
+        let copies = await Copies.find({ branch: branchId });
         if (!copies) {
             throw new error("No book copies found in this branch.");
         }
         return copies;
-    } catch(err) {
+    } catch (err) {
         throw err;
     }
 }
