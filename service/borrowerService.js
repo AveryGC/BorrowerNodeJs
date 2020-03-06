@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const Copies = require('../models/Copy'),
-    Branches = require('../models/Branch')
-    Loans = require('../models/Loan');
-    Borrowers = require('../models/Borrower')
+    Branches = require('../models/Branch'),
+    Loans = require('../models/Loan'),
+    Borrowers = require('../models/Borrower');
 
 let borrowerService = {};
 
