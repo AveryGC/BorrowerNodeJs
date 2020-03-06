@@ -50,6 +50,12 @@ borrowerService.checkoutBook = async (borrowerId, branchId, bookId) => {
 }
 
 borrowerService.returnBook = async (loanId) => {
+    if (!mongoose.Types.ObjectId.isValid(loanId)) {
+        throw {
+            message: 'Invalid Loan Id',
+            status: 400
+        }
+    }
     let session = await mongoose.startSession();
     session.startTransaction();
     try {

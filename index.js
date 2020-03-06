@@ -18,7 +18,6 @@ mongoose.connect('mongodb+srv://admin:admin123@cluster0-dvbv1.mongodb.net/test?r
     fs.readdirSync(modelsPath).forEach(file => {
         require(modelsPath + '/' + file);
     });
-    // seedDB();
 }).catch(err => {
     console.log('ERROR:', err.message);
 });
@@ -30,6 +29,14 @@ app.use(function (req, res, next) {
     next();
 });
 app.use(bodyParser.json());
+app.use((err, req, res, next) => {
+    // This check makes sure this is a JSON parsing issue, but it might be
+    // coming from any middleware, not just body-parser:
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        return res.sendStatus(400); // Bad request
+    }
+    next();
+});
 app.use("/", borrowerRoutes);
 
 app.listen(3000, () => {
