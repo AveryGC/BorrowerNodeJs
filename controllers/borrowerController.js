@@ -29,7 +29,7 @@ router.get('/borrowers', async (req, resp) => {
     } catch (err) {
         if (err.code == "#E784")
             resp.status(404).send(err.message);
-        resp.status(500).send(err);
+        resp.status(500).send(err.message);
     }
 });
 
@@ -41,7 +41,7 @@ router.get('/borrowers/:id/loans', async (req, resp) => {
     } catch (err) {
         if (err.code == "#E784" || err.code == "#E356")
             resp.status(404).send(err.message);
-        resp.status(500).send(err);
+        resp.status(500).send(err.message);
     }
 });
 
@@ -53,7 +53,7 @@ router.get('/branches', async (req, resp) => {
     } catch (err) {
         if (err.code == "#E784")
             resp.status(404).send(err.message);
-        resp.status(500).send(err);
+        resp.status(500).send(err.message);
     }
 });
 
@@ -65,7 +65,7 @@ router.get('/branches/:id/copies', async (req, resp) => {
     } catch (err) {
         if (err.code == "#E784" || err.code == "#E356")
             resp.status(404).send(err.message);
-        resp.status(500).send(err);
+        resp.status(500).send(err.message);
     }
 });
 
