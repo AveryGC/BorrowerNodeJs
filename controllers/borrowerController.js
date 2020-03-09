@@ -1,6 +1,5 @@
 const router = require("express").Router(),
-    service = require('../service/borrowerService.js'),
-    serializer = require('../node_modules/js2xmlparser');
+    service = require('../service/borrowerService.js');
 
 // Checkout book
 router.post('/loans', async (req, res) => {
@@ -26,10 +25,7 @@ router.put('/loans', async (req, res) => {
 router.get('/borrowers', async (req, resp) => {
     try {
         let borrowers = await service.findBorrowers();
-        if(req.accepts('application/json'))
-            resp.status(200).send(borrowers);
-        if(req.accepts('application/xml'))
-            resp.status(200).send(serializer.parse("borrowers" , borrowers));
+        resp.status(200).send(borrowers);
     } catch (err) {
         if (err.code == "#E784")
             resp.status(404).send(err.message);
@@ -41,10 +37,7 @@ router.get('/borrowers', async (req, resp) => {
 router.get('/borrowers/:id/loans', async (req, resp) => {
     try {
         let loans = await service.findLoans(req.params.id);
-        if(req.accepts('application/json'))
-            resp.status(200).send(loans);
-        if(req.accepts('application/xml'))
-            resp.status(200).send(serializer.parse("loans", loans));
+        resp.status(200).send(loans);
     } catch (err) {
         if (err.code == "#E784" || err.code == "#E356")
             resp.status(404).send(err.message);
