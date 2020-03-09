@@ -8,6 +8,13 @@ const Copies = require('../models/Copy'),
 let borrowerService = {};
 
 borrowerService.checkoutBook = async (borrowerId, branchId, bookId) => {
+    //check if ids are valid
+    if (!mongoose.Types.ObjectId.isValid(bookId) || !mongoose.Types.ObjectId.isValid(branchId) || !mongoose.Types.ObjectId.isValid(borrowerId)) {
+        throw {
+            message: "Invalid ID",
+            code: "#E356"
+        };
+    }
     bookId = mongoose.Types.ObjectId(bookId);
     branchId = mongoose.Types.ObjectId(branchId);
     borrowerId = mongoose.Types.ObjectId(borrowerId);
@@ -17,14 +24,23 @@ borrowerService.checkoutBook = async (borrowerId, branchId, bookId) => {
         // check if borrower exists
         let borrower = await Borrowers.find({ _id: borrowerId }).limit(1);
         if (!borrower.length) {
-            throw new Error("Invalid card number for borrower.");
+            throw {
+                message: "Invalid card number for borrower.",
+                code: "#E784"
+            };
         }
         let copies = await Copies.findOne({ "book": bookId, "branch": branchId }).session(session); // associates obj to session
         if (!copies) {
-            throw new Error("Could not find any copies.");
+            throw {
+                message: "Could not find any copies.",
+                code: "#E784"
+            };
         }
         if (!copies.amount) {
-            throw new Error("All copies of this book are currently checked out.");
+            throw {
+                message: "All copies of this book are currently checked out.",
+                code: "#E258"
+            };
         }
         let dateOut = new Date();
         let dateDue = new Date();
@@ -52,9 +68,9 @@ borrowerService.checkoutBook = async (borrowerId, branchId, bookId) => {
 borrowerService.returnBook = async (loanId) => {
     if (!mongoose.Types.ObjectId.isValid(loanId)) {
         throw {
-            message: 'Invalid Loan Id',
-            status: 400
-        }
+            message: "Invalid ID",
+            code: "#E356"
+        };
     }
     let session = await mongoose.startSession();
     session.startTransaction();
@@ -63,13 +79,13 @@ borrowerService.returnBook = async (loanId) => {
         if (!loan) {
             throw {
                 message: 'Loan not found.',
-                status: 404
+                code: "#E784"
             };
         }
         if (loan.dateIn) {
             throw {
                 message: "Book already returned.",
-                status: 400
+                code: "#E258"
             };
         }
         await loan.updateOne({
@@ -88,7 +104,7 @@ borrowerService.returnBook = async (loanId) => {
         if (!copy) {
             throw {
                 //unable to update copies but do not reveal to client
-                status: 500
+                code: "#E000"
             };
         }
         await session.commitTransaction();
@@ -103,11 +119,17 @@ borrowerService.returnBook = async (loanId) => {
 borrowerService.findLoans = async (borrowerId) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(borrowerId))
-            throw new Error("Invalid ID");
+            throw {
+                message: "Invalid ID",
+                code: "#E356"
+            };
         borrowerId = mongoose.Types.ObjectId(borrowerId);
         let loan = await Loans.find({ "borrower": borrowerId, "dateIn": null });
         if (!loan.length) {
-            throw new Error("No Loans Found.");
+            throw {
+                message: "No Loans Found.",
+                code: "#E784"
+            };
         }
         return loan;
     } catch (err) {
@@ -119,7 +141,10 @@ borrowerService.findBorrowers = async () => {
     try {
         let borrowers = await Borrowers.find();
         if (!borrowers.length) {
-            throw new Error("No Borrowers Found.");
+            throw {
+                message: "No Borrowers Found.",
+                code: "#E784"
+            };
         }
         return borrowers;
     } catch (err) {
@@ -131,7 +156,10 @@ borrowerService.findBranches = async () => {
     try {
         let branch = await Branches.find();
         if (!branch.length) {
-            throw new Error("No Branches Found.");
+            throw {
+                message: "No Branches Found.",
+                code: "#E784"
+            };
         }
         return branch;
     } catch (err) {
@@ -142,11 +170,17 @@ borrowerService.findBranches = async () => {
 borrowerService.findCopiesByBranch = async (branchId) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(branchId))
-            throw new Error("Invalid ID")
+            throw {
+                message: "Invalid ID",
+                code: "#E356"
+            };
         branchId = mongoose.Types.ObjectId(branchId);
         let copies = await Copies.find({ "branch": branchId, "amount": { $gt: 0 } });
         if (!copies.length) {
-            throw new Error("No Copies Found.");
+            throw {
+                message: "No Copies Found.",
+                code: "#E784"
+            };
         }
         return copies;
     } catch (err) {
