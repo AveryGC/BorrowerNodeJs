@@ -1,5 +1,6 @@
 const router = require("express").Router(),
-    service = require('../service/borrowerService.js');
+    service = require('../service/borrowerService.js'),
+    serializer = require('../node_modules/js2xmlparser');
 
 // Checkout book
 router.post('/loans', async (req, res) => {
@@ -25,9 +26,14 @@ router.put('/loans', async (req, res) => {
 router.get('/borrowers', async (req, resp) => {
     try {
         let borrowers = await service.findBorrowers();
-        resp.status(200).send(borrowers);
+        if(req.accepts('application/json'))
+            resp.status(200).send(borrowers);
+        if(req.accepts('application/xml'))
+            resp.status(200).send(serializer.parse("borrowers" , borrowers));
     } catch (err) {
-        resp.status(404).send(err.message);
+        if (err.code == "#E784")
+            resp.status(404).send(err.message);
+        resp.status(500).send(err);
     }
 });
 
@@ -35,9 +41,14 @@ router.get('/borrowers', async (req, resp) => {
 router.get('/borrowers/:id/loans', async (req, resp) => {
     try {
         let loans = await service.findLoans(req.params.id);
-        resp.status(200).send(loans);
+        if(req.accepts('application/json'))
+            resp.status(200).send(loans);
+        if(req.accepts('application/xml'))
+            resp.status(200).send(serializer.parse("loans", loans));
     } catch (err) {
-        resp.status(404).send(err.message);
+        if (err.code == "#E784" || err.code == "#E356")
+            resp.status(404).send(err.message);
+        resp.status(500).send(err);
     }
 });
 
@@ -47,7 +58,9 @@ router.get('/branches', async (req, resp) => {
         let branches = await service.findBranches();
         resp.status(200).send(branches);
     } catch (err) {
-        resp.status(404).send(err.message);
+        if (err.code == "#E784")
+            resp.status(404).send(err.message);
+        resp.status(500).send(err);
     }
 });
 
@@ -57,7 +70,9 @@ router.get('/branches/:id/copies', async (req, resp) => {
         let copies = await service.findCopiesByBranch(req.params.id);
         resp.status(200).send(copies);
     } catch (err) {
-        resp.status(404).send(err.message);
+        if (err.code == "#E784" || err.code == "#E356")
+            resp.status(404).send(err.message);
+        resp.status(500).send(err);
     }
 });
 
