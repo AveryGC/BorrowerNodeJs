@@ -5,12 +5,12 @@ const chai = require("chai"),
 
 chai.use(chaiHttp);
 
-describe("Borrowers", function() {
-  it("should list ALL Borrowers", function(done) {
+describe("Borrowers", function () {
+  it("should list ALL Borrowers", function (done) {
     chai
       .request(server)
       .get("/borrowers")
-      .end(function(err, res) {
+      .end(function (err, res) {
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.a("array");
@@ -46,6 +46,40 @@ describe("Checkout Book", () => {
         borrowerId: "5e66949385ed682e1800f4bc",
         bookId: "5e66949385ed682e1800f4a5",
         branchId: "5e66949485ed682e1800f4a8"
+      })
+      .end((err, res) => {
+        res.should.have.status(404);
+        done();
+      });
+  });
+});
+
+describe("Return Book", () => {
+  it("Should successfully return a book", (done) => {
+    chai
+      .request(server)
+      .get("/borrowers/5e66949385ed682e1800f4a2/loans")
+      .end((err, res) => {
+        const loans = res.body;
+        chai
+          .request(server)
+          .put("/loans")
+          .send({
+            loanId: loans[0]._id
+          })
+          .end((err, res) => {
+            res.should.have.status(204);
+            done();
+          });
+      });
+  });
+
+  it("Should respond with a 404 (loan not found)", (done) => {
+    chai
+      .request(server)
+      .put("/loans")
+      .send({
+        loanId: "5e66949485ed682e1800fabc"
       })
       .end((err, res) => {
         res.should.have.status(404);
