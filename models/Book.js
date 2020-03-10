@@ -18,6 +18,6 @@ var bookSchema = new Schema({
         type: Schema.Types.ObjectId, ref: 'Genre',
         required: true
     }]
-});
+}, { versionKey: false });
 
 module.exports = mongoose.model('Book', bookSchema);

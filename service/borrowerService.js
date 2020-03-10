@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
-const Copies = require('../models/Copy'),
-    Branches = require('../models/Branch'),
-    Loans = require('../models/Loan'),
-    Borrowers = require('../models/Borrower');
+const BorrowerDao = require('../daos/BorrowerDao'),
+    CopyDao = require('../daos/CopyDao'),
+    LoanDao = require('../daos/LoanDao'),
+    BranchDao = require('../daos/BranchDao');
 
 let borrowerService = {};
 
@@ -22,14 +22,13 @@ borrowerService.checkoutBook = async (borrowerId, branchId, bookId) => {
     session.startTransaction();
     try {
         // check if borrower exists
-        let borrower = await Borrowers.find({ _id: borrowerId }).limit(1);
-        if (!borrower.length) {
+        if (!await BorrowerDao.exists({ _id: borrowerId })) {
             throw {
                 message: "Invalid card number for borrower.",
                 code: "#E784"
             };
         }
-        let copies = await Copies.findOne({ "book": bookId, "branch": branchId }).session(session); // associates obj to session
+        let copies = await CopyDao.findOne({ "book": bookId, "branch": branchId }).session(session); // associates obj to session
         if (!copies) {
             throw {
                 message: "Could not find any copies.",
@@ -52,9 +51,8 @@ borrowerService.checkoutBook = async (borrowerId, branchId, bookId) => {
             "dateOut": dateOut,
             "dateDue": dateDue
         };
-        await Loans.create([loan], { session });
-        copies.amount--;
-        await copies.save(); // no need to include session because session is alrdy associated with this obj
+        await LoanDao.create([loan], { session });
+        await CopyDao.updateOne(copies, { amount: copies.amount - 1 });
         await session.commitTransaction();
     } catch (err) {
         // rollback any changes made in the database
@@ -75,7 +73,7 @@ borrowerService.returnBook = async (loanId) => {
     let session = await mongoose.startSession();
     session.startTransaction();
     try {
-        const loan = await Loans.findById(mongoose.Types.ObjectId(loanId));
+        const loan = await LoanDao.findById(mongoose.Types.ObjectId(loanId)).session(session);
         if (!loan) {
             throw {
                 message: 'Loan not found.',
@@ -91,7 +89,7 @@ borrowerService.returnBook = async (loanId) => {
         await loan.updateOne({
             dateIn: new Date()
         });
-        const copy = await Copies.findOneAndUpdate({
+        const copy = await CopyDao.findOneAndUpdate({
             book: loan.book._id,
             branch: loan.branch._id
         }, {
@@ -100,7 +98,7 @@ borrowerService.returnBook = async (loanId) => {
             }
         }, {
             useFindAndModify: false
-        });
+        }).session(session);
         if (!copy) {
             throw {
                 //unable to update copies but do not reveal to client
@@ -124,7 +122,7 @@ borrowerService.findLoans = async (borrowerId) => {
                 code: "#E356"
             };
         borrowerId = mongoose.Types.ObjectId(borrowerId);
-        let loan = await Loans.find({ "borrower": borrowerId, "dateIn": null });
+        let loan = await LoanDao.find({ "borrower": borrowerId, "dateIn": null });
         if (!loan.length) {
             throw {
                 message: "No Loans Found.",
@@ -139,7 +137,7 @@ borrowerService.findLoans = async (borrowerId) => {
 
 borrowerService.findBorrowers = async () => {
     try {
-        let borrowers = await Borrowers.find();
+        let borrowers = await BorrowerDao.find();
         if (!borrowers.length) {
             throw {
                 message: "No Borrowers Found.",
@@ -154,7 +152,7 @@ borrowerService.findBorrowers = async () => {
 
 borrowerService.findBranches = async () => {
     try {
-        let branch = await Branches.find();
+        let branch = await BranchDao.find();
         if (!branch.length) {
             throw {
                 message: "No Branches Found.",
@@ -175,7 +173,7 @@ borrowerService.findCopiesByBranch = async (branchId) => {
                 code: "#E356"
             };
         branchId = mongoose.Types.ObjectId(branchId);
-        let copies = await Copies.find({ "branch": branchId, "amount": { $gt: 0 } });
+        let copies = await CopyDao.find({ "branch": branchId, "amount": { $gt: 0 } });
         if (!copies.length) {
             throw {
                 message: "No Copies Found.",

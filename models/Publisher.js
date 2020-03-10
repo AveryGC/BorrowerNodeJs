@@ -8,6 +8,6 @@ var publisherSchema = new Schema({
     },
     address: String,
     phone: String
-});
+}, { versionKey: false });
 
 module.exports = mongoose.model('Publisher', publisherSchema);

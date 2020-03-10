@@ -11,6 +11,6 @@ var borrowerSchema = new Schema({
     loans: [{
         type: Schema.Types.ObjectId, ref: 'Loan'
     }]
-});
+}, { versionKey: false });
 
 module.exports = mongoose.model('Borrower', borrowerSchema);
