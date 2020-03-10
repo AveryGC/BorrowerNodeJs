@@ -1,6 +1,7 @@
 const express = require("express"),
   app = express(),
   bodyParser = require("body-parser");
+require('body-parser-xml')(bodyParser);
 
 // DB connection
 require("./config/db");
@@ -9,7 +10,7 @@ const borrowerRoutes = require("./controllers/borrowerController");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
@@ -19,6 +20,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(bodyParser.json());
+app.use(bodyParser.xml());
 
 app.use((err, req, res, next) => {
   // This check makes sure this is a JSON parsing issue, but it might be
