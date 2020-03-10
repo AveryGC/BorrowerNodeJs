@@ -14,6 +14,6 @@ var copySchema = new Schema({
         type: Number,
         required: true
     }
-});
+}, { versionKey: false });
 
 module.exports = mongoose.model('Copy', copySchema);

@@ -6,6 +6,6 @@ var authorSchema = new Schema({
         type: String,
         required: true
     }
-});
+}, { versionKey: false });
 
 module.exports = mongoose.model('Author', authorSchema);

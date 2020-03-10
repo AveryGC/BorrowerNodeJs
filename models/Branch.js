@@ -12,6 +12,6 @@ var branchSchema = new Schema({
     },
     copies: [{ type: Schema.Types.ObjectId, ref: 'Copy', }],
     loans: [{ type: Schema.Types.ObjectId, ref: 'Loan', }]
-});
+}, { versionKey: false });
 
 module.exports = mongoose.model('Branch', branchSchema);

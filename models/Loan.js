@@ -25,6 +25,6 @@ var loanSchema = new Schema({
     dateIn: {
         type: Date
     }
-});
+}, { versionKey: false });
 
 module.exports = mongoose.model('Loan', loanSchema);
