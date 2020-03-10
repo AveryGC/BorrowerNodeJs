@@ -4,7 +4,7 @@
   "description": "Borrower REST API for the LMS project with Nodejs.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha 'test/controllers/test-server.js'",
     "start": "node index.js"
   },
   "author": "Alex Chavez",
@@ -14,5 +14,10 @@
     "express": "^4.17.1",
     "mongoose": "^5.9.3",
     "xml-js": "^1.6.11"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^7.1.0"
   }
 }
