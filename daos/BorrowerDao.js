@@ -4,7 +4,7 @@ module.exports = {
     find(conditions) {
         return Borrower.find(conditions);
     },
-    exists(params) {
-        return Borrower.exists(params);
+    exists(filter) {
+        return Borrower.exists(filter);
     }
 }

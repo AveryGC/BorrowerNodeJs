@@ -1,8 +1,8 @@
 const Loan = require('../models/Loan');
 
 module.exports = {
-    create(params, options) {
-        return Loan.create(params, options);
+    create(properties, options) {
+        return Loan.create(properties, options);
     },
     find(conditions) {
         return Loan.find(conditions);
