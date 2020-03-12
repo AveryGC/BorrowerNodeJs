@@ -201,11 +201,11 @@ router.get('/branches/:id/copies', async (req, res) => {
         });
     } catch (err) {
         if (err.code == "#E356")
-            resp.status(400);
+            res.status(400);
         else if (err.code == "#E784")
-            resp.status(404);
+            res.status(404);
         else
-            resp.status(500);
+            res.status(500);
         res.send(err.message);
     }
 });
