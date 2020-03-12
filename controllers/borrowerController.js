@@ -6,7 +6,7 @@ const router = require("express").Router(),
 router.post('/loans', async (req, res) => {
     try {
         await service.checkoutBook(req.body.borrowerId, req.body.branchId, req.body.bookId);
-        res.status(201).send();
+        res.status(201).send({});
     } catch (err) {
         if (err.code == "#E258")
             res.status(409);
@@ -25,7 +25,7 @@ router.post('/loans', async (req, res) => {
 router.put('/loans', async (req, res) => {
     try {
         await service.returnBook(req.body.loanId);
-        res.status(204).send();
+        res.status(200).send({});
     } catch (err) {
         if (err.code == "#E258")
             res.status(409);
