@@ -72,6 +72,36 @@ router.get('/borrowers', async (req, res) => {
     }
 });
 
+//Read Borrower By Id
+router.get('/borrowers/:id', async (req, res) => {
+    try {
+        let borrower = await service.findBorrowerById(req.params.id);
+        res.status(200);
+        res.format({
+            json: () => {
+                res.send(borrower)
+            },
+            xml: () => {
+                let tempBorrower = borrower.toObject();
+                tempBorrower._id = tempBorrower._id.toString();
+                let xmlData = "<borrower>"
+                let result = convert.js2xml(tempBorrower, { compact: true });
+                xmlData += result;
+                xmlData += "</borrower>"
+                res.send(xmlData);
+            }
+        });
+    } catch (err) {
+        if (err.code == "#E356")
+            res.status(400);
+        else if (err.code == "#E784")
+            res.status(404);
+        else
+            res.status(500);
+        res.send(err.message);
+    }
+})
+
 // Read all loans for a specific borrower
 router.get('/borrowers/:id/loans', async (req, res) => {
     try {
