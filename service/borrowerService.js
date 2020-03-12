@@ -186,4 +186,24 @@ borrowerService.findCopiesByBranch = async (branchId) => {
     }
 }
 
+borrowerService.findBorrowerById = async (borrowerId) => {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(borrowerId))
+            throw {
+                message: "Invalid ID",
+                code: "#E356"
+            };
+        borrowerId = mongoose.Types.ObjectId(borrowerId);
+        let borrower = await BorrowerDao.findById(borrowerId);
+        if (!borrower)
+            throw {
+                message: "No Borrowers Found.",
+                code: "#E784"
+            };
+        return borrower;
+    } catch (err) {
+        throw err;
+    }
+}
+
 module.exports = borrowerService;

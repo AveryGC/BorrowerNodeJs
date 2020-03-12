@@ -47,20 +47,20 @@ router.get('/borrowers', async (req, res) => {
         res.status(200);
         res.format({
             json: () => {
-              res.send(borrowers)
+                res.send(borrowers)
             },
             xml: () => {
-              let xmlData = "<borrowers>";
-              borrowers.forEach(borrower => {
-                let tempBorrower = borrower.toObject();
-                tempBorrower._id = tempBorrower._id.toString();
-                xmlData += "<borrower>"
-                let result = convert.js2xml(tempBorrower, { compact:true }); 
-                xmlData += result;
-                xmlData += "</borrower>"
-              });
-              xmlData += "</borrowers>";
-              res.send(xmlData);
+                let xmlData = "<borrowers>";
+                borrowers.forEach(borrower => {
+                    let tempBorrower = borrower.toObject();
+                    tempBorrower._id = tempBorrower._id.toString();
+                    xmlData += "<borrower>"
+                    let result = convert.js2xml(tempBorrower, { compact: true });
+                    xmlData += result;
+                    xmlData += "</borrower>"
+                });
+                xmlData += "</borrowers>";
+                res.send(xmlData);
             }
         });
     } catch (err) {
@@ -72,6 +72,36 @@ router.get('/borrowers', async (req, res) => {
     }
 });
 
+//Read Borrower By Id
+router.get('/borrowers/:id', async (req, res) => {
+    try {
+        let borrower = await service.findBorrowerById(req.params.id);
+        res.status(200);
+        res.format({
+            json: () => {
+                res.send(borrower)
+            },
+            xml: () => {
+                let tempBorrower = borrower.toObject();
+                tempBorrower._id = tempBorrower._id.toString();
+                let xmlData = "<borrower>"
+                let result = convert.js2xml(tempBorrower, { compact: true });
+                xmlData += result;
+                xmlData += "</borrower>"
+                res.send(xmlData);
+            }
+        });
+    } catch (err) {
+        if (err.code == "#E356")
+            res.status(400);
+        else if (err.code == "#E784")
+            res.status(404);
+        else
+            res.status(500);
+        res.send(err.message);
+    }
+})
+
 // Read all loans for a specific borrower
 router.get('/borrowers/:id/loans', async (req, res) => {
     try {
@@ -79,23 +109,23 @@ router.get('/borrowers/:id/loans', async (req, res) => {
         res.status(200);
         res.format({
             json: () => {
-              res.send(loans)
+                res.send(loans)
             },
             xml: () => {
                 let xmlData = "<loans>";
                 loans.forEach(loan => {
-                  let tempLoan = loan.toObject();
-                  tempLoan._id = tempLoan._id.toString();
-                  tempLoan.borrower = tempLoan.borrower.toString()
-                  tempLoan.book = tempLoan.book.toString();
-                  tempLoan.branch = tempLoan.branch.toString();
-                  tempLoan.dateOut = tempLoan.dateOut.toString();
-                  tempLoan.dateDue = tempLoan.dateDue.toString();
-                  tempLoan.dateIn = tempLoan.dateIn? tempLoan.dateIn.toString(): null;
-                  xmlData += "<loan>"
-                  let result = convert.js2xml(tempLoan, { compact:true }); 
-                  xmlData += result;
-                  xmlData += "</loan>"
+                    let tempLoan = loan.toObject();
+                    tempLoan._id = tempLoan._id.toString();
+                    tempLoan.borrower = tempLoan.borrower.toString()
+                    tempLoan.book = tempLoan.book.toString();
+                    tempLoan.branch = tempLoan.branch.toString();
+                    tempLoan.dateOut = tempLoan.dateOut.toString();
+                    tempLoan.dateDue = tempLoan.dateDue.toString();
+                    tempLoan.dateIn = tempLoan.dateIn ? tempLoan.dateIn.toString() : null;
+                    xmlData += "<loan>"
+                    let result = convert.js2xml(tempLoan, { compact: true });
+                    xmlData += result;
+                    xmlData += "</loan>"
                 });
                 xmlData += "</loans>";
                 res.send(xmlData);
@@ -119,17 +149,17 @@ router.get('/branches', async (req, res) => {
         res.status(200);
         res.format({
             json: () => {
-              res.send(branches)
+                res.send(branches)
             },
             xml: () => {
                 let xmlData = "<branches>";
                 branches.forEach(branch => {
-                  let tempBranch = branch.toObject();
-                  tempBranch._id = tempBranch._id.toString();
-                  xmlData += "<branch>"
-                  let result = convert.js2xml(tempBranch, { compact:true }); 
-                  xmlData += result;
-                  xmlData += "</branch>"
+                    let tempBranch = branch.toObject();
+                    tempBranch._id = tempBranch._id.toString();
+                    xmlData += "<branch>"
+                    let result = convert.js2xml(tempBranch, { compact: true });
+                    xmlData += result;
+                    xmlData += "</branch>"
                 });
                 xmlData += "</branches>";
                 res.send(xmlData);
@@ -151,19 +181,19 @@ router.get('/branches/:id/copies', async (req, res) => {
         res.status(200);
         res.format({
             json: () => {
-              res.send(copies)
+                res.send(copies)
             },
             xml: () => {
                 let xmlData = "<copies>";
                 copies.forEach(copy => {
-                  let tempCopy = copy.toObject();
-                  tempCopy._id = tempCopy._id.toString();
-                  tempCopy.book = tempCopy.book.toString();
-                  tempCopy.branch = tempCopy.branch.toString();
-                  xmlData += "<copy>"
-                  let result = convert.js2xml(tempCopy, { compact:true }); 
-                  xmlData += result;
-                  xmlData += "</copy>"
+                    let tempCopy = copy.toObject();
+                    tempCopy._id = tempCopy._id.toString();
+                    tempCopy.book = tempCopy.book.toString();
+                    tempCopy.branch = tempCopy.branch.toString();
+                    xmlData += "<copy>"
+                    let result = convert.js2xml(tempCopy, { compact: true });
+                    xmlData += result;
+                    xmlData += "</copy>"
                 });
                 xmlData += "</copies>";
                 res.send(xmlData);
