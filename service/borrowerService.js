@@ -114,6 +114,32 @@ borrowerService.returnBook = async (loanId) => {
     }
 }
 
+borrowerService.registerBorrower = async (name, address, phone) => {
+    if (!name && !address && !phone) {
+        throw {
+            message: "Invalid ID",
+            code: "#E356"
+        };
+    }
+    let session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+        borrower = {
+            "name": name,
+            "address": address,
+            "phone": phone
+        };
+        returned = await BorrowerDao.create([borrower], session);
+        session.commitTransaction()
+        return returned[0];
+    } catch (err) {
+        await session.abortTransaction();
+        throw err;
+    } finally {
+        session.endSession();
+    }
+}
+
 borrowerService.findLoans = async (borrowerId) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(borrowerId))

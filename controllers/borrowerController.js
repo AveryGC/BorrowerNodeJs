@@ -71,6 +71,33 @@ router.get('/borrowers', async (req, res) => {
         res.send(err.message);
     }
 });
+router.post('/borrowers', async (req, res) => {
+    try {
+        let borrower = await service.registerBorrower(req.body.name, req.body.address, req.body.phone);
+        res.status(201);
+        res.format({
+            json: () => {
+                res.send(borrower)
+            },
+            xml: () => {
+                let tempBorrower = borrower.toObject();
+                tempBorrower._id = tempBorrower._id.toString();
+                let xmlData = "<borrower>"
+                let result = convert.js2xml(tempBorrower, { compact: true });
+                xmlData += result;
+                xmlData += "</borrower>"
+                res.send(xmlData);
+            }
+        });
+    } catch (err) {
+        if (err.code == "#E356")
+            res.status(400);
+        //default error is server error
+        else
+            res.status(500);
+        res.send(err.message);
+    }
+});
 
 //Read Borrower By Id
 router.get('/borrowers/:id', async (req, res) => {
