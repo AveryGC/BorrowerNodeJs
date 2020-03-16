@@ -149,12 +149,6 @@ borrowerService.findLoans = async (borrowerId) => {
             };
         borrowerId = mongoose.Types.ObjectId(borrowerId);
         let loan = await LoanDao.find({ "borrower": borrowerId, "dateIn": null });
-        if (!loan.length) {
-            throw {
-                message: "No Loans Found.",
-                code: "#E784"
-            };
-        }
         return loan;
     } catch (err) {
         throw err;
