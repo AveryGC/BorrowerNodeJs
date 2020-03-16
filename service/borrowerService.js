@@ -194,12 +194,6 @@ borrowerService.findCopiesByBranch = async (branchId) => {
             };
         branchId = mongoose.Types.ObjectId(branchId);
         let copies = await CopyDao.find({ "branch": branchId, "amount": { $gt: 0 } });
-        if (!copies.length) {
-            throw {
-                message: "No Copies Found.",
-                code: "#E784"
-            };
-        }
         return copies;
     } catch (err) {
         throw err;
