@@ -19,5 +19,8 @@ module.exports = {
     },
     updateOne(conditions, update) {
         return Loan.updateOne(conditions, update);
+    },
+    countDocuments(conditions) {
+        return Loan.countDocuments(conditions);
     }
 }
