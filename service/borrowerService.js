@@ -185,17 +185,16 @@ borrowerService.findBranches = async () => {
     }
 }
 
-borrowerService.findCopiesByBranch = async (branchId, skip, limit) => {
+borrowerService.findCopiesByBranch = async (branchId, query) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(branchId))
             throw {
                 message: "Invalid ID",
                 code: "#E356"
             };
-        let result = await CopyDao.find(mongoose.Types.ObjectId(branchId), Number(skip), Number(limit));
-        return result[0];
+        let copies = await CopyDao.find(mongoose.Types.ObjectId(branchId), query);
+        return copies[0];
     } catch (err) {
-        console.log(err);
         throw err;
     }
 }
