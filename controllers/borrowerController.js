@@ -202,9 +202,9 @@ router.get('/branches', async (req, res) => {
 });
 
 // Read all book copies in a specific branch
-router.get('/branches/:id/copies', async (req, res) => {
+router.get('/branches/:id/copies/skip/:skip/limit/:limit', async (req, res) => {
     try {
-        let copies = await service.findCopiesByBranch(req.params.id);
+        let copies = await service.findCopiesByBranch(req.params.id, req.params.skip, req.params.limit);
         res.status(200);
         res.format({
             json: () => {
