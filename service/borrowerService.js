@@ -140,7 +140,7 @@ borrowerService.registerBorrower = async (name, address, phone) => {
     }
 }
 
-borrowerService.findLoans = async (borrowerId) => {
+borrowerService.findLoans = async (borrowerId, pageSize, currentPage) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(borrowerId))
             throw {
@@ -148,8 +148,10 @@ borrowerService.findLoans = async (borrowerId) => {
                 code: "#E356"
             };
         borrowerId = mongoose.Types.ObjectId(borrowerId);
-        let loan = await LoanDao.find({ "borrower": borrowerId, "dateIn": null });
-        return loan;
+        let conditions = { "borrower": borrowerId, "dateIn": null }
+        let loans = await LoanDao.find(conditions).skip(pageSize * (currentPage - 1)).limit(pageSize);
+        let numLoans = await LoanDao.countDocuments(conditions);
+        return {loans, numLoans};
     } catch (err) {
         throw err;
     }

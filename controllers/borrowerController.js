@@ -132,15 +132,17 @@ router.get('/borrowers/:id', async (req, res) => {
 // Read all loans for a specific borrower
 router.get('/borrowers/:id/loans', async (req, res) => {
     try {
-        let loans = await service.findLoans(req.params.id);
+        const pageSize = +req.query.pagesize;
+        const currentPage = +req.query.page;
+        let loanData = await service.findLoans(req.params.id, pageSize, currentPage);
         res.status(200);
         res.format({
             json: () => {
-                res.send(loans)
+                res.send(loanData);
             },
             xml: () => {
-                let xmlData = "<loans>";
-                loans.forEach(loan => {
+                let xmlData = "<loanData><loans>";
+                loanData.loans.forEach(loan => {
                     let tempLoan = loan.toObject();
                     tempLoan._id = tempLoan._id.toString();
                     tempLoan.borrower = tempLoan.borrower.toString()
@@ -148,13 +150,14 @@ router.get('/borrowers/:id/loans', async (req, res) => {
                     tempLoan.branch = tempLoan.branch.toString();
                     tempLoan.dateOut = tempLoan.dateOut.toString();
                     tempLoan.dateDue = tempLoan.dateDue.toString();
-                    tempLoan.dateIn = tempLoan.dateIn ? tempLoan.dateIn.toString() : null;
+                    tempLoan.dateIn = null;
                     xmlData += "<loan>"
                     let result = convert.js2xml(tempLoan, { compact: true });
                     xmlData += result;
                     xmlData += "</loan>"
                 });
                 xmlData += "</loans>";
+                xmlData += "<numLoans>"+loanData.numLoans+"</numLoans></loanData>"
                 res.send(xmlData);
             }
         });
