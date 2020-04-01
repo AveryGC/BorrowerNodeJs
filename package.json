@@ -4,7 +4,7 @@
   "description": "Borrower REST API for the LMS project with Nodejs.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha 'test/controllers/test-server.js'",
+    "test": "mocha --exit 'test/controllers/test-server.js'",
     "start": "node index.js"
   },
   "author": "Alex Chavez",
