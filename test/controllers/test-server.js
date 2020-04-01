@@ -60,7 +60,7 @@ describe("Return Book", () => {
       .request(server)
       .get("/borrowers/5e66949385ed682e1800f4a2/loans")
       .end((err, res) => {
-        const loans = res.body;
+        const loans = res.body.loans;
         chai
           .request(server)
           .put("/loans")
